@@ -41,11 +41,34 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun UnscrambleScreen() {
 
-    // Phase 2: Remember the user's answer
-    var answer by remember {
+    // =====================================
+    // PHASE 2 - USER ANSWER STATE
+    // =====================================
+
+    var userAnswer by remember {
         mutableStateOf("")
     }
 
+    // =====================================
+    // PHASE 3 - SCORE STATE
+    // =====================================
+
+    var score by remember {
+        mutableStateOf(0)
+    }
+
+    // =====================================
+    // PHASE 3 - CORRECT ANSWER
+    // =====================================
+
+    val correctAnswer = "APPLE"
+
+    // Message shown after clicking SUBMIT
+    var message by remember {
+        mutableStateOf("")
+    }
+
+    // Controls the focus of the TextField
     val focusManager = LocalFocusManager.current
 
     Column(
@@ -62,7 +85,10 @@ fun UnscrambleScreen() {
         verticalArrangement = Arrangement.Center
     ) {
 
-        // Title
+        // =====================================
+        // PHASE 1 - TITLE
+        // =====================================
+
         Text(
             text = "UNSCRAMBLE",
             style = MaterialTheme.typography.headlineMedium,
@@ -73,7 +99,10 @@ fun UnscrambleScreen() {
             modifier = Modifier.height(30.dp)
         )
 
-        // Instruction
+        // =====================================
+        // PHASE 1 - INSTRUCTION
+        // =====================================
+
         Text(
             text = "Unscramble the word!",
             color = Color.Black
@@ -83,7 +112,10 @@ fun UnscrambleScreen() {
             modifier = Modifier.height(15.dp)
         )
 
-        // Scrambled word
+        // =====================================
+        // PHASE 1 - SCRAMBLED WORD
+        // =====================================
+
         Text(
             text = "LPAEP",
             style = MaterialTheme.typography.headlineLarge,
@@ -94,12 +126,16 @@ fun UnscrambleScreen() {
             modifier = Modifier.height(25.dp)
         )
 
-        // Phase 2: Working TextField
+        // =====================================
+        // PHASE 2 - WORKING INPUT FIELD
+        // =====================================
+
         OutlinedTextField(
-            value = answer,
+            value = userAnswer,
 
             onValueChange = {
-                answer = it
+                userAnswer = it
+                message = ""
             },
 
             label = {
@@ -115,11 +151,37 @@ fun UnscrambleScreen() {
             modifier = Modifier.height(20.dp)
         )
 
-        // Submit button
-        // Phase 2: Button does nothing yet
+        // =====================================
+        // PHASE 3 - SUBMIT BUTTON
+        // =====================================
+
         Button(
             onClick = {
-                // Nothing happens
+
+                // Remove keyboard focus
+                focusManager.clearFocus()
+
+                // =================================
+                // PHASE 3 - IF STATEMENT
+                // =================================
+
+                if (userAnswer.trim().equals(
+                        correctAnswer,
+                        ignoreCase = true
+                    )
+                ) {
+
+                    // Correct answer
+                    score += 1
+
+                    message = "Correct! 🎉"
+
+                } else {
+
+                    // Wrong answer
+                    message = "Incorrect. Try again!"
+
+                }
             },
 
             modifier = Modifier.fillMaxWidth()
@@ -133,9 +195,26 @@ fun UnscrambleScreen() {
             modifier = Modifier.height(20.dp)
         )
 
-        // Score
+        // =====================================
+        // PHASE 3 - RESULT MESSAGE
+        // =====================================
+
         Text(
-            text = "Score: 0",
+            text = message,
+            style = MaterialTheme.typography.titleMedium,
+            color = Color.Black
+        )
+
+        Spacer(
+            modifier = Modifier.height(20.dp)
+        )
+
+        // =====================================
+        // PHASE 3 - SCORE
+        // =====================================
+
+        Text(
+            text = "Score: $score",
             style = MaterialTheme.typography.titleMedium,
             color = Color.Black
         )
