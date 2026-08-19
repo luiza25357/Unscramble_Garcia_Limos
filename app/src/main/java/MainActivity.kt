@@ -41,11 +41,11 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun UnscrambleScreen() {
 
+    // Phase 2: Remember the user's answer
     var answer by remember {
         mutableStateOf("")
     }
 
-    // Controls the focus of the text field
     val focusManager = LocalFocusManager.current
 
     Column(
@@ -54,7 +54,6 @@ fun UnscrambleScreen() {
             .background(Color(0xFFE3F2FD))
             .padding(24.dp)
             .clickable {
-                // Remove focus when clicking outside the text field
                 focusManager.clearFocus()
             },
 
@@ -65,7 +64,7 @@ fun UnscrambleScreen() {
 
         // Title
         Text(
-            text = "Unscramble Game",
+            text = "UNSCRAMBLE",
             style = MaterialTheme.typography.headlineMedium,
             color = Color.Black
         )
@@ -76,7 +75,7 @@ fun UnscrambleScreen() {
 
         // Instruction
         Text(
-            text = "Unscramble this word:",
+            text = "Unscramble the word!",
             color = Color.Black
         )
 
@@ -95,7 +94,7 @@ fun UnscrambleScreen() {
             modifier = Modifier.height(25.dp)
         )
 
-        // Answer input
+        // Phase 2: Working TextField
         OutlinedTextField(
             value = answer,
 
@@ -104,11 +103,10 @@ fun UnscrambleScreen() {
             },
 
             label = {
-                Text("Your answer")
+                Text("Enter your answer")
             },
 
-            modifier = Modifier
-                .fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
 
             singleLine = true
         )
@@ -118,13 +116,13 @@ fun UnscrambleScreen() {
         )
 
         // Submit button
+        // Phase 2: Button does nothing yet
         Button(
             onClick = {
-                focusManager.clearFocus()
+                // Nothing happens
             },
 
-            modifier = Modifier
-                .fillMaxWidth()
+            modifier = Modifier.fillMaxWidth()
         ) {
             Text(
                 text = "SUBMIT"
@@ -135,7 +133,7 @@ fun UnscrambleScreen() {
             modifier = Modifier.height(20.dp)
         )
 
-// Score
+        // Score
         Text(
             text = "Score: 0",
             style = MaterialTheme.typography.titleMedium,
@@ -143,8 +141,3 @@ fun UnscrambleScreen() {
         )
     }
 }
-
-
-
-
-
