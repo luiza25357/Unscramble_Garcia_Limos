@@ -61,12 +61,6 @@ fun UnscrambleScreen() {
     // PHASE 4 - LIST OF WORDS
     // =====================================
 
-    val scrambledWords = listOf(
-        "LPAEP",
-        "GOD",
-        "OKOB"
-    )
-
     val correctWords = listOf(
         "APPLE",
         "DOG",
@@ -88,10 +82,17 @@ fun UnscrambleScreen() {
     val currentAnswer = correctWords[currentWordIndex]
 
     // =====================================
-    // PHASE 4 - GET CURRENT SCRAMBLED WORD
+    // PHASE 5 - CREATE A SCRAMBLED WORD
     // =====================================
 
-    val currentScrambledWord = scrambledWords[currentWordIndex]
+    var scrambledWord by remember {
+        mutableStateOf(
+            correctWords[0]
+                .toList()
+                .shuffled()
+                .joinToString("")
+        )
+    }
 
     // Message shown after clicking SUBMIT
     var message by remember {
@@ -143,11 +144,11 @@ fun UnscrambleScreen() {
         )
 
         // =====================================
-        // PHASE 4 - CURRENT SCRAMBLED WORD
+        // PHASE 5 - DISPLAY SCRAMBLED WORD
         // =====================================
 
         Text(
-            text = currentScrambledWord,
+            text = scrambledWord,
             style = MaterialTheme.typography.headlineLarge,
             color = Color.Black
         )
@@ -182,7 +183,8 @@ fun UnscrambleScreen() {
         )
 
         // =====================================
-        // PHASE 3 + PHASE 4 - SUBMIT BUTTON
+        // PHASE 3 + PHASE 4 + PHASE 5
+        // SUBMIT BUTTON
         // =====================================
 
         Button(
@@ -195,7 +197,8 @@ fun UnscrambleScreen() {
                 // PHASE 3 - CHECK ANSWER
                 // =================================
 
-                if (userAnswer.trim().equals(
+                if (
+                    userAnswer.trim().equals(
                         currentAnswer,
                         ignoreCase = true
                     )
@@ -210,24 +213,37 @@ fun UnscrambleScreen() {
                     // PHASE 4 - MOVE TO NEXT WORD
                     // =================================
 
-                    if (currentWordIndex < correctWords.size - 1) {
+                    if (
+                        currentWordIndex <
+                        correctWords.size - 1
+                    ) {
 
                         currentWordIndex += 1
 
-                        // Clear the previous answer
+                        // =================================
+                        // PHASE 5 - CREATE NEW SCRAMBLED WORD
+                        // =================================
+
+                        scrambledWord =
+                            correctWords[currentWordIndex]
+                                .toList()
+                                .shuffled()
+                                .joinToString("")
+
+                        // Clear previous answer
                         userAnswer = ""
 
                     } else {
 
                         // All words completed
-                        message = "Congratulations! Game Complete! 🎉"
+                        message =
+                            "Congratulations! Game Complete! 🎉"
                     }
 
                 } else {
 
                     // Wrong answer
                     message = "Incorrect. Try again!"
-
                 }
             },
 
