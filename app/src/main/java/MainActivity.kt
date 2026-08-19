@@ -58,10 +58,40 @@ fun UnscrambleScreen() {
     }
 
     // =====================================
-    // PHASE 3 - CORRECT ANSWER
+    // PHASE 4 - LIST OF WORDS
     // =====================================
 
-    val correctAnswer = "APPLE"
+    val scrambledWords = listOf(
+        "LPAEP",
+        "GOD",
+        "OKOB"
+    )
+
+    val correctWords = listOf(
+        "APPLE",
+        "DOG",
+        "BOOK"
+    )
+
+    // =====================================
+    // PHASE 4 - KEEP TRACK OF CURRENT WORD
+    // =====================================
+
+    var currentWordIndex by remember {
+        mutableStateOf(0)
+    }
+
+    // =====================================
+    // PHASE 4 - GET CURRENT ANSWER
+    // =====================================
+
+    val currentAnswer = correctWords[currentWordIndex]
+
+    // =====================================
+    // PHASE 4 - GET CURRENT SCRAMBLED WORD
+    // =====================================
+
+    val currentScrambledWord = scrambledWords[currentWordIndex]
 
     // Message shown after clicking SUBMIT
     var message by remember {
@@ -113,11 +143,11 @@ fun UnscrambleScreen() {
         )
 
         // =====================================
-        // PHASE 1 - SCRAMBLED WORD
+        // PHASE 4 - CURRENT SCRAMBLED WORD
         // =====================================
 
         Text(
-            text = "LPAEP",
+            text = currentScrambledWord,
             style = MaterialTheme.typography.headlineLarge,
             color = Color.Black
         )
@@ -152,7 +182,7 @@ fun UnscrambleScreen() {
         )
 
         // =====================================
-        // PHASE 3 - SUBMIT BUTTON
+        // PHASE 3 + PHASE 4 - SUBMIT BUTTON
         // =====================================
 
         Button(
@@ -162,11 +192,11 @@ fun UnscrambleScreen() {
                 focusManager.clearFocus()
 
                 // =================================
-                // PHASE 3 - IF STATEMENT
+                // PHASE 3 - CHECK ANSWER
                 // =================================
 
                 if (userAnswer.trim().equals(
-                        correctAnswer,
+                        currentAnswer,
                         ignoreCase = true
                     )
                 ) {
@@ -175,6 +205,23 @@ fun UnscrambleScreen() {
                     score += 1
 
                     message = "Correct! 🎉"
+
+                    // =================================
+                    // PHASE 4 - MOVE TO NEXT WORD
+                    // =================================
+
+                    if (currentWordIndex < correctWords.size - 1) {
+
+                        currentWordIndex += 1
+
+                        // Clear the previous answer
+                        userAnswer = ""
+
+                    } else {
+
+                        // All words completed
+                        message = "Congratulations! Game Complete! 🎉"
+                    }
 
                 } else {
 
@@ -186,6 +233,7 @@ fun UnscrambleScreen() {
 
             modifier = Modifier.fillMaxWidth()
         ) {
+
             Text(
                 text = "SUBMIT"
             )
